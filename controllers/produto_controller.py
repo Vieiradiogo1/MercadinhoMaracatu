@@ -1,4 +1,5 @@
 from MercadinhoMaracatu.models.produtos import Produto
+from models.produtos import Produto
 
 class ProdutoController:
     @staticmethod
