@@ -1,4 +1,4 @@
-from models.database import Database
+from MercadinhoMaracatu.models.database import Database
 
 class Produto:
     def __init__(self, id=None, nome=None, preco=None, codigo=None, estoque=None):

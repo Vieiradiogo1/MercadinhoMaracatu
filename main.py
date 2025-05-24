@@ -4,14 +4,17 @@ from PyQt5.QtWidgets import (
     QPushButton, QLabel, QTableWidget, QTableWidgetItem, QLineEdit,
     QGridLayout, QScrollArea, QFrame, QComboBox, QMessageBox, QInputDialog
 )
+import sys
 import os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "MercadinhoMaracatu")))
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QHeaderView
+from MercadinhoMaracatu.interfaces.pdv import PDVWindow
 # Import controllers
-from controllers.produto_controller import ProdutoController
-from controllers.venda_controller import VendaController
+from MercadinhoMaracatu.controllers.produto_controller import ProdutoController
+from MercadinhoMaracatu.controllers.venda_controller import VendaController
 
 
 class ProdutoCard(QFrame):

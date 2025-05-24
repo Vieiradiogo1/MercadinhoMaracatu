@@ -6,8 +6,10 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 
-# Importando os controllers (quando estiver implementado)
-# from controllers.produto_controller import ProdutoController
+# Importando o controller
+from MercadinhoMaracatu.controllers.produto_controller import ProdutoController
+from MercadinhoMaracatu.controllers.venda_controller import VendaController
+
 
 class NovoProdutoDialog(QDialog):
     """Dialog para adicionar ou editar produtos"""
@@ -109,8 +111,8 @@ class GerenciamentoProdutosWindow(QMainWindow):
         self.setWindowTitle("Gerenciamento de Produtos")
         self.setGeometry(100, 100, 900, 600)
         
-        # Inicializa o controller (quando estiver implementado)
-        # self.produto_controller = ProdutoController()
+        # Inicializa o controller
+        self.produto_controller = ProdutoController()
         
         self.setup_ui()
         self.carregar_produtos()
@@ -140,18 +142,7 @@ class GerenciamentoProdutosWindow(QMainWindow):
         
         # Botão de novo produto
         novo_btn = QPushButton("Novo Produto")
-        novo_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #4CAF50;
-                color: white;
-                padding: 5px 15px;
-                border: none;
-                border-radius: 3px;
-            }
-            QPushButton:hover {
-                background-color: #45a049;
-            }
-        """)
+        novo_btn.setStyleSheet("""QPushButton { background-color: #4CAF50; color: white; padding: 5px 15px; border: none; border-radius: 3px; } QPushButton:hover { background-color: #45a049; }""")
         novo_btn.clicked.connect(self.abrir_novo_produto)
         header_layout.addWidget(novo_btn)
         
@@ -180,20 +171,11 @@ class GerenciamentoProdutosWindow(QMainWindow):
     
     def carregar_produtos(self):
         """Carrega os produtos do banco de dados"""
-        # Aqui você implementaria a lógica para carregar do controller
-        # produtos = self.produto_controller.listar()
-        
-        # Vamos usar dados de exemplo por enquanto
-        produtos = [
-            {"codigo": "CAF-100", "nome": "Café com Leite", "preco": 5.35, "estoque": 100, "categoria": "Bebidas"},
-            {"codigo": "BOL-50", "nome": "Bolo de Cenoura", "preco": 32.90, "estoque": 10, "categoria": "Doces"},
-            {"codigo": "CHO-200", "nome": "Chocolate", "preco": 8.90, "estoque": 50, "categoria": "Doces"},
-            {"codigo": "PAO-150", "nome": "Pão Francês", "preco": 0.75, "estoque": 200, "categoria": "Padaria"},
-            {"codigo": "REF-120", "nome": "Refrigerante Cola", "preco": 6.50, "estoque": 48, "categoria": "Bebidas"},
-        ]
-        
-        # Preencher a tabela
-        self.preencher_tabela(produtos)
+        try:
+            produtos = self.produto_controller.listar()
+            self.preencher_tabela(produtos)
+        except Exception as e:
+            QMessageBox.critical(self, "Erro", f"Erro ao carregar produtos: {e}")
     
     def preencher_tabela(self, produtos):
         """Preenche a tabela com os produtos"""
@@ -245,88 +227,3 @@ class GerenciamentoProdutosWindow(QMainWindow):
             acoes_layout.addStretch()
             
             self.tabela.setCellWidget(row, 5, acoes_widget)
-    
-    def filtrar_produtos(self):
-        """Filtra produtos baseado na busca"""
-        texto = self.pesquisa_input.text().lower()
-        
-        # Implementação real conectaria ao controller
-        # produtos = self.produto_controller.buscar(texto)
-        
-        # Dados de exemplo filtrados
-        todos_produtos = [
-            {"codigo": "CAF-100", "nome": "Café com Leite", "preco": 5.35, "estoque": 100, "categoria": "Bebidas"},
-            {"codigo": "BOL-50", "nome": "Bolo de Cenoura", "preco": 32.90, "estoque": 10, "categoria": "Doces"},
-            {"codigo": "CHO-200", "nome": "Chocolate", "preco": 8.90, "estoque": 50, "categoria": "Doces"},
-            {"codigo": "PAO-150", "nome": "Pão Francês", "preco": 0.75, "estoque": 200, "categoria": "Padaria"},
-            {"codigo": "REF-120", "nome": "Refrigerante Cola", "preco": 6.50, "estoque": 48, "categoria": "Bebidas"},
-        ]
-        
-        # Filtragem local (para demonstração)
-        if not texto:
-            produtos_filtrados = todos_produtos
-        else:
-            produtos_filtrados = [
-                p for p in todos_produtos 
-                if texto in p["nome"].lower() or 
-                   texto in p["codigo"].lower() or 
-                   texto in p["categoria"].lower()
-            ]
-        
-        # Atualizar tabela
-        self.preencher_tabela(produtos_filtrados)
-    
-    def abrir_novo_produto(self):
-        """Abre o diálogo para adicionar novo produto"""
-        dialog = NovoProdutoDialog(parent=self)
-        if dialog.exec_():
-            produto = dialog.get_produto()
-            
-            # Aqui você chamaria o controller para salvar
-            # self.produto_controller.criar(produto)
-            
-            # Como exemplo, vamos apenas atualizar a tabela
-            QMessageBox.information(self, "Sucesso", f"Produto '{produto['nome']}' adicionado com sucesso!")
-            self.carregar_produtos()
-    
-    def editar_produto(self, produto):
-        """Abre o diálogo para editar um produto existente"""
-        dialog = NovoProdutoDialog(produto=produto, parent=self)
-        if dialog.exec_():
-            produto_atualizado = dialog.get_produto()
-            
-            # Aqui você chamaria o controller para atualizar
-            # self.produto_controller.atualizar(produto["id"], produto_atualizado)
-            
-            # Como exemplo, vamos apenas atualizar a tabela
-            QMessageBox.information(self, "Sucesso", f"Produto '{produto_atualizado['nome']}' atualizado com sucesso!")
-            self.carregar_produtos()
-    
-    def confirmar_exclusao(self, produto):
-        """Confirma antes de excluir um produto"""
-        resposta = QMessageBox.question(
-            self, 
-            "Confirmar Exclusão", 
-            f"Tem certeza que deseja excluir o produto '{produto['nome']}'?",
-            QMessageBox.Yes | QMessageBox.No, 
-            QMessageBox.No
-        )
-        
-        if resposta == QMessageBox.Yes:
-            # Aqui você chamaria o controller para excluir
-            # self.produto_controller.excluir(produto["id"])
-            
-            # Como exemplo, vamos apenas atualizar a tabela
-            QMessageBox.information(self, "Sucesso", f"Produto '{produto['nome']}' excluído com sucesso!")
-            self.carregar_produtos()
-    
-    def voltar_menu(self):
-        """Volta para o menu principal"""
-        self.close()
-
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = GerenciamentoProdutosWindow()
-    window.show()
-    sys.exit(app.exec_())

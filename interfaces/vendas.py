@@ -8,6 +8,9 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtGui import QIcon
 
+from MercadinhoMaracatu.controllers.venda_controller import VendaController
+from MercadinhoMaracatu.controllers.produto_controller import ProdutoController
+
 # Importando os controllers (quando estiver implementado)
 # from controllers.venda_controller import VendaController
 # from controllers.produto_controller import ProdutoController

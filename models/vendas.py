@@ -1,5 +1,5 @@
-from models.database import Database
-from models.produtos import Produto
+from MercadinhoMaracatu.models.database import Database
+from MercadinhoMaracatu.models.produtos import Produto
 
 class Venda:
     def __init__(self, produto_id, quantidade, total=None, data_venda=None, id=None):

@@ -4,12 +4,21 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 
 # Importando as telas
-from main import PDVWindow
-from cadastro import GerenciamentoProdutosWindow
+#from MercadinhoMaracatu.interfaces.vendas import GerenciamentoProdutosWindow
+from MercadinhoMaracatu.interfaces.pdv import PDVWindow
 
 # Importando controllers
-from controllers.produto_controller import ProdutoController
-from controllers.venda_controller import VendaController
+from MercadinhoMaracatu.controllers.produto_controller import ProdutoController
+from MercadinhoMaracatu.controllers.venda_controller import VendaController
+
+# Importando modelos
+from MercadinhoMaracatu.models.vendas import Venda
+from MercadinhoMaracatu.models.produtos import Produto
+
+from PyQt5.QtWidgets import QApplication
+import sys
+
+# etc
 
 class MenuPrincipal(QWidget):
     """Menu principal do sistema"""
@@ -116,7 +125,7 @@ class MainWindow(QMainWindow):
     def abrir_tela_gerenciamento_produtos(self):
         """Abre a tela de gerenciamento de produtos"""
         if not self.gerenciamento_window:
-            self.gerenciamento_window = GerenciamentoProdutosWindow()
+            #self.gerenciamento_window = GerenciamentoProdutosWindow()
             self.gerenciamento_window.setup_controller(self.produto_controller)
             self.stacked_widget.addWidget(self.gerenciamento_window)
         
